@@ -18,6 +18,13 @@ CudgX是星汉未来推出的面向云原生时代的AIOps智能运维引擎，�
 6、支持Web服务指标的自动化测量，以及自动扩缩容；<br>
 7、开放的指标定义平台，合作伙伴可以基于开放平台进行个性化指标配置；<br>
 
+联系我们
+----
+[微博](https://weibo.com/galaxyfuture) | [知乎](https://www.zhihu.com/org/xing-yi-wei-lai) | [B站](https://space.bilibili.com/2057006251)
+| [微信公众号](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat_official_account.md)
+| [企业微信交流群](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat.md)
+
+
 系统架构
 --------
 
@@ -125,18 +132,20 @@ CudgX是星汉未来推出的面向云原生时代的AIOps智能运维引擎，�
       - 查看服务监控相关图例： `冗余度走势` `QPS` `机器数` 图。
       - 查看服务扩缩记录。     
 
-
-联系我们
-----
-[微博](https://weibo.com/galaxyfuture) | [知乎](https://www.zhihu.com/org/xing-yi-wei-lai) | [B站](https://space.bilibili.com/2057006251)
-| [微信公众号](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat_official_account.md)
-| [企业微信交流群](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat.md)
-
-
-
+视频教程
+------
+[ComandX安装](https://www.bilibili.com/video/BV1n34y167o8/) <br>
+[添加云账户](https://www.bilibili.com/video/BV1Jr4y1S7q4/)  <br>
+[创建集群](https://www.bilibili.com/video/BV1Wb4y1v7jw/)   <br>
+[手动扩缩容](https://www.bilibili.com/video/BV1bm4y197QD/)  <br>
+[K8s集群创建与Pod切割](https://www.bilibili.com/video/BV1FY411p7rE/)<br>
 
 
-
+技术文章
+------
+[《云原生技术如何每分钟级迁移TB级数据》](https://zhuanlan.zhihu.com/p/442746588)<br>
+[《企业迁移到K8s的最佳实践》](https://zhuanlan.zhihu.com/p/445131885) <br>
+[《来自一线大厂的十大云原生成本优化手段》](https://zhuanlan.zhihu.com/p/448405809)<br>
 
 
 行为准则
