@@ -16,6 +16,7 @@ type ClusterSample struct {
 }
 
 //AverageQPS 查询服务/集群的平均QPS
+//Deprecated: Use AverageMetric
 func AverageQPS(serviceName, clusterName string, begin, end int64) (samples []ClusterSample, err error) {
 	client := clients.ClickhouseRdCli
 	sqlContent := fmt.Sprintf(`select timestamp ,clusterName , sum(value)/ count( distinct(serviceHost) ) 
@@ -29,6 +30,7 @@ func AverageQPS(serviceName, clusterName string, begin, end int64) (samples []Cl
 }
 
 //TotalQPS 查询集群 QPS
+//Deprecated: Use TotalMetric
 func TotalQPS(serviceName, clusterName string, begin, end int64) (samples []ClusterSample, err error) {
 
 	sqlContent := fmt.Sprintf(`select timestamp ,clusterName , sum(value)

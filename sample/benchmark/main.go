@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
@@ -41,8 +42,9 @@ func main() {
 	flag.Parse()
 
 	httpclient = &http.Client{
-		Timeout: 100 * time.Millisecond,
+		Timeout: 1000 * time.Millisecond,
 	}
+	rand.Seed(time.Now().UnixNano())
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
 
@@ -94,7 +96,16 @@ func main() {
 
 func request() {
 
-	resp, err := httpclient.Get(fmt.Sprintf("%s", *piServer))
+	path := "/low"
+	switch rand.Intn(3) {
+	case 0:
+		path = "/low"
+	case 1:
+		path = "/middle"
+	case 2:
+		path = "/high"
+	}
+	resp, err := httpclient.Get(fmt.Sprintf("%s%s", *piServer, path))
 	if err != nil {
 		logger.GetLogger().Error("request failed", zap.Error(err))
 		return

@@ -87,9 +87,10 @@ func scheduleRule(rule *model.PredictRule) error {
 	const minSampleCount = lookbackDuration - metricsSendDuration
 	serviceName := rule.ServiceName
 	clusterName := rule.ClusterName
+	metricName := rule.MetricName
 	benchmark := rule.BenchmarkQps
 
-	series, err := service.QueryRedundancyByQPS(serviceName, clusterName, float64(benchmark), time.Now().Add(-1*lookbackDuration).Unix(), time.Now().Add(-1*metricsSendDuration).Unix(), consts.DefaultTrimmedSecond)
+	series, err := service.QueryRedundancy(serviceName, clusterName, metricName, float64(benchmark), time.Now().Add(-1*lookbackDuration).Unix(), time.Now().Add(-1*metricsSendDuration).Unix(), consts.DefaultTrimmedSecond)
 	if err != nil {
 		return err
 	}

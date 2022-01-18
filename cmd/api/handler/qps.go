@@ -60,7 +60,7 @@ func QueryInstanceCountByQPSMetrics(c *gin.Context) {
 	if !pass {
 		return
 	}
-	redundancySeries, err := service.QueryInstances(serviceName, clusterName, begin, end, consts.TrimmedSecond)
+	redundancySeries, err := service.QueryInstancesByQPS(serviceName, clusterName, begin, end, consts.TrimmedSecond)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))
 		return

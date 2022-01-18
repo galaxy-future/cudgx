@@ -75,9 +75,9 @@ var _ = ginkgo.Describe("Qps", func() {
 		})
 	})
 
-	ginkgo.Context("InstanceCount", func() {
+	ginkgo.Context("InstanceCountByQPS", func() {
 		ginkgo.It("specified cluster", func() {
-			samples, err := query.InstanceCount(serviceName, cluster1Name, begin, end)
+			samples, err := query.InstanceCountByQPS(serviceName, cluster1Name, begin, end)
 			gomega.Expect(err).To(gomega.BeNil())
 			gomega.Expect(len(samples)).To(gomega.Equal(int(end - begin)))
 			for i, sample := range samples {
@@ -90,7 +90,7 @@ var _ = ginkgo.Describe("Qps", func() {
 			}
 		})
 		ginkgo.It("all cluster", func() {
-			samples, err := query.InstanceCount(serviceName, "", begin, end)
+			samples, err := query.InstanceCountByQPS(serviceName, "", begin, end)
 			gomega.Expect(err).To(gomega.BeNil())
 			gomega.Expect(len(samples)).To(gomega.Equal(int(end-begin) * 2))
 			for i, sample := range samples {
