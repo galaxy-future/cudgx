@@ -56,7 +56,7 @@ func main() {
 	{
 		metricGroup.GET("/redundancy/:metric_name", handler.QueryRedundancy)
 		metricGroup.GET("/instance_count/:metric_name", handler.QueryInstanceCountByMetrics)
-		metricGroup.GET("/water_line/:metric_name", handler.QueryTotalMetric)
+		metricGroup.GET("/load/:metric_name", handler.QueryTotalMetric)
 	}
 
 	predictApiV1 := r.Group("/api/v1/cudgx/predict")
