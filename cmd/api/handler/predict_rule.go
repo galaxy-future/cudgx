@@ -54,7 +54,8 @@ func UpdatePredictRule(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse(response.ParamError))
 		return
 	}
-	if strings.ToLower(req.MetricName) != consts.QPSMetricsName {
+	if strings.ToLower(req.MetricName) != consts.QPSMetricsName &&
+		strings.ToLower(req.MetricName) != consts.LatencySectionFactorMetricsName {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse(response.MetricNameError))
 		return
 	}
