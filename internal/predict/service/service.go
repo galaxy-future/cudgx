@@ -7,6 +7,13 @@ import (
 
 //QueryRedundancy 基于QPS查询系统冗余度
 func QueryRedundancy(serviceName, clusterName, metricName string, benchmark float64, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
+	//TODO 根绝trimmedSecond区分是否视图，还是redundancyKeeper定义有些模糊
+	if trimmedSecond != 1 {
+		series := cacheManager.getRedundancySeries(serviceName+clusterName, consts.MetricNameRedundancy, end)
+		if series != nil {
+			return series, nil
+		}
+	}
 	samples, err := query.AverageMetric(serviceName, clusterName, metricName, begin, end)
 	if err != nil {
 		return nil, err
@@ -30,6 +37,13 @@ func QueryRedundancy(serviceName, clusterName, metricName string, benchmark floa
 
 //QueryServiceTotalMetric 基于QPS查询系统冗余度
 func QueryServiceTotalMetric(serviceName, clusterName, metricName string, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
+	//TODO 根绝trimmedSecond区分是否视图，还是redundancyKeeper定义有些模糊
+	if trimmedSecond != 1 {
+		series := cacheManager.getRedundancySeries(serviceName+clusterName, consts.MetricNameLoad, end)
+		if series != nil {
+			return series, nil
+		}
+	}
 	samples, err := query.TotalMetric(serviceName, clusterName, metricName, begin, end)
 	if err != nil {
 		return nil, err
@@ -50,6 +64,13 @@ func QueryServiceTotalMetric(serviceName, clusterName, metricName string, begin,
 
 //QueryInstancesByMetric 基于QPS查询服务节点个数
 func QueryInstancesByMetric(serviceName, clusterName, metricName string, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
+	//TODO 根绝trimmedSecond区分是否视图，还是redundancyKeeper定义有些模糊
+	if trimmedSecond != 1 {
+		series := cacheManager.getRedundancySeries(serviceName+clusterName, consts.MetricNameInstanceCount, end)
+		if series != nil {
+			return series, nil
+		}
+	}
 	samples, err := query.InstanceCountByMetric(serviceName, clusterName, metricName, begin, end)
 	if err != nil {
 		return nil, err

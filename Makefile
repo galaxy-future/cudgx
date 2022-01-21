@@ -1,4 +1,4 @@
-IMAGE_VERSION=v0.5
+IMAGE_VERSION=v0.6
 
 vet:
 	@echo "go vet ."

@@ -11,27 +11,6 @@ import (
 	"time"
 )
 
-//QueryRedundancyMetricName 获取服务冗余度衡量指标，当前支持只支持单指标
-func QueryRedundancyMetricName(c *gin.Context) {
-	serviceName := c.Query("service_name")
-	if serviceName == "" {
-		c.JSON(http.StatusBadRequest, response.MkFailedResponse("服务名称不能为空"))
-		return
-	}
-	clusterName := c.Query("cluster_name")
-	if clusterName == "" {
-		c.JSON(http.StatusBadRequest, response.MkFailedResponse("集群名称不能为空"))
-		return
-	}
-	rule, err := service.GetPredictRuleByServiceNameAndClusterName(serviceName, clusterName)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, response.MkFailedResponse(fmt.Sprintf("获取规则时出错, err: %s", err)))
-		return
-	}
-	c.JSON(http.StatusOK, response.MkSuccessResponse(rule.MetricName))
-	return
-}
-
 // QueryRedundancy 基于QPS指标数据输出冗余度
 func QueryRedundancy(c *gin.Context) {
 	serviceName, clusterName, metricName, begin, end, pass := validateMetricQuery(c)
@@ -39,6 +18,11 @@ func QueryRedundancy(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse(fmt.Sprintf("参数错误")))
 		return
 	}
+	if end > time.Now().Unix() {
+		end = time.Now().Unix()
+	}
+	begin = begin / consts.TrimmedSecond * consts.TrimmedSecond
+	end = end / consts.TrimmedSecond * consts.TrimmedSecond
 	rule, err := service.GetPredictRuleByServiceNameAndClusterName(serviceName, clusterName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse(fmt.Sprintf("获取规则时出错, err: %s", err)))
@@ -70,6 +54,11 @@ func QueryTotalMetric(c *gin.Context) {
 	if !pass {
 		return
 	}
+	if end > time.Now().Unix() {
+		end = time.Now().Unix()
+	}
+	begin = begin / consts.TrimmedSecond * consts.TrimmedSecond
+	end = end / consts.TrimmedSecond * consts.TrimmedSecond
 	redundancySeries, err := service.QueryServiceTotalMetric(serviceName, clusterName, metricName, begin, end, consts.TrimmedSecond)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))
@@ -85,6 +74,11 @@ func QueryInstanceCountByMetrics(c *gin.Context) {
 	if !pass {
 		return
 	}
+	if end > time.Now().Unix() {
+		end = time.Now().Unix()
+	}
+	begin = begin / consts.TrimmedSecond * consts.TrimmedSecond
+	end = end / consts.TrimmedSecond * consts.TrimmedSecond
 	redundancySeries, err := service.QueryInstancesByMetric(serviceName, clusterName, metricName, begin, end, consts.TrimmedSecond)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))

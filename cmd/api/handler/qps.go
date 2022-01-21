@@ -19,6 +19,11 @@ func QueryRedundancyByQPS(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse(fmt.Sprintf("参数错误")))
 		return
 	}
+	if end > time.Now().Unix() {
+		end = time.Now().Unix()
+	}
+	begin = begin / consts.TrimmedSecond * consts.TrimmedSecond
+	end = end / consts.TrimmedSecond * consts.TrimmedSecond
 	rule, err := service.GetPredictRuleByServiceNameAndClusterName(serviceName, clusterName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse(fmt.Sprintf("获取规则时出错, err: %s", err)))
@@ -45,6 +50,11 @@ func QueryTotalQPS(c *gin.Context) {
 	if !pass {
 		return
 	}
+	if end > time.Now().Unix() {
+		end = time.Now().Unix()
+	}
+	begin = begin / consts.TrimmedSecond * consts.TrimmedSecond
+	end = end / consts.TrimmedSecond * consts.TrimmedSecond
 	redundancySeries, err := service.QueryServiceTotalQPS(serviceName, clusterName, begin, end, consts.TrimmedSecond)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))
@@ -60,6 +70,11 @@ func QueryInstanceCountByQPSMetrics(c *gin.Context) {
 	if !pass {
 		return
 	}
+	if end > time.Now().Unix() {
+		end = time.Now().Unix()
+	}
+	begin = begin / consts.TrimmedSecond * consts.TrimmedSecond
+	end = end / consts.TrimmedSecond * consts.TrimmedSecond
 	redundancySeries, err := service.QueryInstancesByQPS(serviceName, clusterName, begin, end, consts.TrimmedSecond)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))

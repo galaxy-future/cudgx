@@ -24,3 +24,9 @@ const (
 	RuleStatusEnable  = "enable"
 	RuleStatusDisable = "disable"
 )
+
+const (
+	MetricNameRedundancy    = "redundancy"
+	MetricNameLoad          = "load"
+	MetricNameInstanceCount = "insanceCount"
+)
