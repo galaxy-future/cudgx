@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/Shopify/sarama v1.30.1
-	github.com/galaxy-future/metrics-go v0.0.0-20220120165754-d67c8b286364
+	github.com/galaxy-future/metrics-go v0.0.0-20220121082446-d9f98212b43e
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/protobuf v1.5.2
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
