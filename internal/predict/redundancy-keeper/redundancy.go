@@ -83,8 +83,8 @@ func (keeper *ScheduleXRedundancyKeeper) schedule() error {
 
 func scheduleRule(rule *model.PredictRule) error {
 	const lookbackDuration = time.Minute
-	const metricsSendDuration = 30 * time.Second
-	const minSampleCount = lookbackDuration - metricsSendDuration
+	const metricsSendDuration = 5 * time.Second
+	const minSampleCount = lookbackDuration - 30*time.Second
 	serviceName := rule.ServiceName
 	clusterName := rule.ClusterName
 	metricName := rule.MetricName
@@ -142,6 +142,9 @@ func scheduleRule(rule *model.PredictRule) error {
 			if currentCount+countToChange > rule.MaxInstanceCount {
 				countToChange = rule.MaxInstanceCount - currentCount
 			}
+			if countToChange > 30 {
+				countToChange = 30
+			}
 			err := xclient.ExpandService(serviceName, clusterName, countToChange)
 			if err != nil {
 				return fmt.Errorf("expand service failed , %w", err)
@@ -150,6 +153,9 @@ func scheduleRule(rule *model.PredictRule) error {
 			countToChange = int(math.Abs(float64(countToChange)))
 			if currentCount-countToChange < rule.MinInstanceCount {
 				countToChange = currentCount - rule.MinInstanceCount
+			}
+			if countToChange > 30 {
+				countToChange = 30
 			}
 			err := xclient.ShrinkService(serviceName, clusterName, countToChange)
 			if err != nil {
