@@ -28,6 +28,7 @@ type ClusterRedundancySeries struct {
 }
 
 //QueryRedundancyByQPS 基于QPS查询系统冗余度
+//Deprecated: QueryRedundancyByMetric
 func QueryRedundancyByQPS(serviceName, clusterName string, benchmark float64, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
 	samples, err := query.AverageQPS(serviceName, clusterName, begin, end)
 	if err != nil {
@@ -51,6 +52,7 @@ func QueryRedundancyByQPS(serviceName, clusterName string, benchmark float64, be
 }
 
 //QueryServiceTotalQPS 基于QPS查询系统冗余度
+//Deprecated: QueryServiceTotalMetric
 func QueryServiceTotalQPS(serviceName, clusterName string, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
 	samples, err := query.TotalQPS(serviceName, clusterName, begin, end)
 	if err != nil {

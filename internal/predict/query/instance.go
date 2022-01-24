@@ -7,8 +7,9 @@ import (
 	"github.com/galaxy-future/cudgx/internal/predict/consts"
 )
 
-//InstanceCount 查询服务节点数量
-func InstanceCount(serviceName, clusterName string, begin, end int64) (samples []ClusterSample, err error) {
+//InstanceCountByQPS 查询服务节点数量
+//Deprecated: Use InstanceCountByMetric
+func InstanceCountByQPS(serviceName, clusterName string, begin, end int64) (samples []ClusterSample, err error) {
 	client := clients.ClickhouseRdCli
 	sqlContent := fmt.Sprintf(`select timestamp ,clusterName , count( distinct(serviceHost)) 
 			from %s.%s 

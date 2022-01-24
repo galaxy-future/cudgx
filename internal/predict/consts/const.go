@@ -1,6 +1,7 @@
 package consts
 
 const QPSMetricsName = "qps"
+const LatencySectionFactorMetricsName = "qps_section_factor"
 const DefaultPredictQueryCount = 60
 const DefaultPredictMinCount = 50
 const MinSkipFactor = 0.1
@@ -22,4 +23,10 @@ const (
 const (
 	RuleStatusEnable  = "enable"
 	RuleStatusDisable = "disable"
+)
+
+const (
+	MetricNameRedundancy    = "redundancy"
+	MetricNameLoad          = "load"
+	MetricNameInstanceCount = "insanceCount"
 )

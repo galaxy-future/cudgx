@@ -52,6 +52,12 @@ func main() {
 		redundancyGroup.GET("/instance_count", handler.QueryInstanceCountByQPSMetrics)
 		redundancyGroup.GET("/qps_total", handler.QueryTotalQPS)
 	}
+	metricGroup := r.Group("/api/v1/query/metric")
+	{
+		metricGroup.GET("/redundancy/:metric_name", handler.QueryRedundancy)
+		metricGroup.GET("/instance_count/:metric_name", handler.QueryInstanceCountByMetrics)
+		metricGroup.GET("/load/:metric_name", handler.QueryTotalMetric)
+	}
 
 	predictApiV1 := r.Group("/api/v1/cudgx/predict")
 	rulePath := predictApiV1.Group("/rule")
