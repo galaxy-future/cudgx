@@ -2,6 +2,7 @@ package query
 
 import (
 	"fmt"
+
 	"github.com/galaxy-future/cudgx/internal/clients"
 )
 

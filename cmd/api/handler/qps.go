@@ -2,10 +2,10 @@ package handler
 
 import (
 	"fmt"
-	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	"net/http"
 	"time"
 
+	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	"github.com/galaxy-future/cudgx/internal/predict/service"
 	"github.com/galaxy-future/cudgx/internal/response"
 	"github.com/gin-gonic/gin"

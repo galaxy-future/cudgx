@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	"math"
 	"net"
 	"time"
 
 	"github.com/galaxy-future/cudgx/common/logger"
+	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	metricGo "github.com/galaxy-future/metrics-go"
 	"github.com/galaxy-future/metrics-go/aggregate"
 	"github.com/galaxy-future/metrics-go/types"
@@ -147,7 +147,6 @@ func pi(n int) float64 {
 	}
 	return f
 }
-
 
 func initMetrics() {
 	latencyMin = metricGo.NewMonitoringMetric("latencyMin", []string{}, aggregate.NewMinBuilder())

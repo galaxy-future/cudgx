@@ -2,13 +2,14 @@ package handler
 
 import (
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	"github.com/galaxy-future/cudgx/internal/predict/service"
 	"github.com/galaxy-future/cudgx/internal/response"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
-	"net/http"
-	"time"
 )
 
 // QueryRedundancy 基于QPS指标数据输出冗余度

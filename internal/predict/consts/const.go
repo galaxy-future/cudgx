@@ -16,8 +16,8 @@ const (
 )
 
 const (
-	XClientUsername = "root"
-	XClientPassword = "123456"
+	XClientUsername = "gf_cudgx"
+	XClientPassword = "jMRPx36uUB"
 )
 
 const (
