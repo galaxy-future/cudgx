@@ -27,6 +27,26 @@ func GetPredictRule(c *gin.Context) {
 	c.JSON(http.StatusOK, response.MkSuccessResponse(predictRule))
 }
 
+// GetPredictRuleInfo 获取扩缩容规则
+func GetPredictRuleInfo(c *gin.Context) {
+	serviceName := c.Query("service_name")
+	if serviceName == "" {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse("服务名称不能为空"))
+		return
+	}
+	clusterName := c.Query("cluster_name")
+	if clusterName == "" {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse("集群名称不能为空"))
+		return
+	}
+	predictRule, err := service.GetPredictRuleByServiceNameAndClusterName(serviceName, clusterName)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, response.MkSuccessResponse(predictRule))
+}
+
 // CreatePredictRule 创建扩缩容规则
 func CreatePredictRule(c *gin.Context) {
 	req := request.CreatePredictRuleRequest{}

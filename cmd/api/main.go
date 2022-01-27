@@ -55,6 +55,7 @@ func main() {
 	metricGroup := r.Group("/api/v1/query/metric")
 	{
 		metricGroup.GET("/redundancy/:metric_name", handler.QueryRedundancy)
+		metricGroup.GET("/redundancy", handler.QueryRedundancyByServiceNameAndClusterName)
 		metricGroup.GET("/instance_count/:metric_name", handler.QueryInstanceCountByMetrics)
 		metricGroup.GET("/load/:metric_name", handler.QueryTotalMetric)
 	}
@@ -63,6 +64,7 @@ func main() {
 	rulePath := predictApiV1.Group("/rule")
 	{
 		rulePath.GET("/:id", handler.GetPredictRule)
+		rulePath.GET("/info", handler.GetPredictRuleInfo)
 		rulePath.POST("/create", handler.CreatePredictRule)
 		rulePath.POST("/update", handler.UpdatePredictRule)
 		rulePath.POST("/batch/delete", handler.BatchDeletePredictRule)

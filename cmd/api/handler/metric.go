@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-// QueryRedundancy 基于QPS指标数据输出冗余度
+// QueryRedundancy 基于指标数据输出冗余度
 func QueryRedundancy(c *gin.Context) {
 	serviceName, clusterName, metricName, begin, end, pass := validateMetricQuery(c)
 	if !pass {
@@ -47,6 +47,46 @@ func QueryRedundancy(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response.MkSuccessResponse(redundancySeries))
+}
+
+// QueryRedundancyByServiceNameAndClusterName 查询冗余度
+func QueryRedundancyByServiceNameAndClusterName(c *gin.Context) {
+	serviceName := c.Query("service_name")
+	if serviceName == "" {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse("服务名称不能为空"))
+		return
+	}
+	clusterName := c.Query("cluster_name")
+	if clusterName == "" {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse("集群名称不能为空"))
+		return
+	}
+	rule, err := service.GetPredictRuleByServiceNameAndClusterName(serviceName, clusterName)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse(fmt.Sprintf("获取规则时出错, err: %s", err)))
+		return
+	}
+	benchmark := rule.BenchmarkQps
+	if benchmark <= 0 {
+		c.JSON(http.StatusBadRequest, response.MkFailedResponse("benchmark不能为0"))
+		return
+	}
+	redundancySeries, err := service.QueryRedundancy(serviceName, clusterName, rule.MetricName, float64(benchmark), time.Now().Add(-5*time.Second).Unix(), time.Now().Unix(), consts.DefaultTrimmedSecond)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))
+		return
+	}
+	var redundancy float64
+	for _, cluster := range redundancySeries.Clusters {
+		if cluster.ClusterName == clusterName && len(cluster.Values) != 0 {
+			for _, value := range cluster.Values {
+				redundancy = redundancy + value
+			}
+			redundancy = redundancy / float64(len(cluster.Values))
+		}
+	}
+
+	c.JSON(http.StatusOK, response.MkSuccessResponse(redundancy))
 }
 
 // QueryTotalMetric 查询QPS

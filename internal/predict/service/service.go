@@ -26,7 +26,7 @@ func QueryRedundancy(serviceName, clusterName, metricName string, benchmark floa
 	}
 	series := &RedundancySeries{
 		ServiceName: serviceName,
-		MetricName:  consts.QPSMetricsName,
+		MetricName:  metricName,
 	}
 
 	for _, cluster := range clusters {
@@ -53,7 +53,7 @@ func QueryServiceTotalMetric(serviceName, clusterName, metricName string, begin,
 
 	series := &RedundancySeries{
 		ServiceName: serviceName,
-		MetricName:  consts.QPSMetricsName,
+		MetricName:  metricName,
 	}
 
 	for _, cluster := range clusters {
@@ -80,7 +80,7 @@ func QueryInstancesByMetric(serviceName, clusterName, metricName string, begin, 
 
 	series := &RedundancySeries{
 		ServiceName: serviceName,
-		MetricName:  consts.QPSMetricsName,
+		MetricName:  metricName,
 	}
 
 	for _, cluster := range clusters {
