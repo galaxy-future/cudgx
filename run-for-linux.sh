@@ -61,12 +61,12 @@ esac
 #             --create \
 #             --topic monitoring_metrics_test
 # deploy api
-docker run -d --name cudgx_api --network host -v $(pwd)/conf/api.json:/home/tiger/api/conf/api.json galaxyfuture/cudgx-api:"${1:-latest}"
+docker run -d --name cudgx_api --network host -v $(pwd)/conf/api.json:/home/cudgx/api/conf/api.json galaxyfuture/cudgx-api:latest
 # deploy gateway
-docker run -d --name cudgx_gateway --network host -v $(pwd)/conf/gateway.json:/home/tiger/gateway/conf/gateway.json  galaxyfuture/cudgx-gateway:"${1:-latest}"
+docker run -d --name cudgx_gateway --network host -v $(pwd)/conf/gateway.json:/home/cudgx/gateway/conf/gateway.json galaxyfuture/cudgx-gateway:latest
 # deploy consumer
-docker run -d --name cudgx_consumer --network host -v $(pwd)/conf/consumer.json:/home/tiger/api/conf/consumer.json galaxyfuture/cudgx-consumer:"${1:-latest}"
+docker run -d --name cudgx_consumer --network host -v $(pwd)/conf/consumer.json:/home/cudgx/api/conf/consumer.json galaxyfuture/cudgx-consumer:latest
 # deploy pi
-# docker run -d --name cudgx_sample_pi --network host --env CUDGX_SERVICE_NAME=gf.cudgx.sample.pi --env CUDGX_CLUSTER_NAME=default --env CUDGX_GATEWAY_URL=http://127.0.0.1:8080 galaxyfuture/cudgx-sample-pi:"${1:-latest}"
+# docker run -d --name cudgx_sample_pi --network host --env CUDGX_SERVICE_NAME=gf.cudgx.sample.pi --env CUDGX_CLUSTER_NAME=default --env CUDGX_GATEWAY_URL=http://127.0.0.1:8080 galaxyfuture/cudgx-sample-pi:latest
 # deploy benchmark
-# docker run -d --name cudgx_sample_benchmark --network host galaxyfuture/cudgx-sample-benchmark:"${1:-latest}" --gf.cudgx.sample.benchmark.sever-address=http://10.10.10.10/pi
+# docker run -d --name cudgx_sample_benchmark --network host galaxyfuture/cudgx-sample-benchmark:latest --gf.cudgx.sample.benchmark.sever-address=http://10.10.10.10/pi

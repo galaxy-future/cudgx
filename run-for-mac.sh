@@ -62,13 +62,13 @@ esac
 #             --topic monitoring_metrics_test
 # deploy api
 sed "s/127.0.0.1/host.docker.internal/g" $(pwd)/conf/api.json > $(pwd)/conf/api.json.mac
-docker run -d --name cudgx_api --add-host host.docker.internal:host-gateway -v $(pwd)/conf/api.json:/home/tiger/api/conf/api.json galaxyfuture/cudgx-api:latest
+docker run -d --name cudgx_api --add-host host.docker.internal:host-gateway -v $(pwd)/conf/api.json:/home/cudgx/api/conf/api.json galaxyfuture/cudgx-api:latest
 # deploy gateway
 sed "s/127.0.0.1/host.docker.internal/g" $(pwd)/conf/gateway.json > $(pwd)/conf/gateway.json.mac
-docker run -d --name cudgx_gateway --add-host host.docker.internal:host-gateway -v $(pwd)/conf/gateway.json:/home/tiger/gateway/conf/gateway.json  galaxyfuture/cudgx-gateway:latest
+docker run -d --name cudgx_gateway --add-host host.docker.internal:host-gateway -v $(pwd)/conf/gateway.json:/home/cudgx/gateway/conf/gateway.json  galaxyfuture/cudgx-gateway:latest
 # deploy consumer
 sed "s/127.0.0.1/host.docker.internal/g" $(pwd)/conf/consumer.json > $(pwd)/conf/consumer.json.mac
-docker run -d --name cudgx_consumer --add-host host.docker.internal:host-gateway -v $(pwd)/conf/consumer.json:/home/tiger/api/conf/consumer.json galaxyfuture/cudgx-consumer:latest
+docker run -d --name cudgx_consumer --add-host host.docker.internal:host-gateway -v $(pwd)/conf/consumer.json:/home/cudgx/api/conf/consumer.json galaxyfuture/cudgx-consumer:latest
 # deploy pi
 # docker run -d --name cudgx_sample_pi --add-host host.docker.internal:host-gateway galaxyfuture/cudgx-sample-pi:latest
 # deploy benchmark

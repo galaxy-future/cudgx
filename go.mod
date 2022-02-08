@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/Shopify/sarama v1.30.1
-	github.com/galaxy-future/metrics-go v0.0.0-20220121082446-d9f98212b43e
+	github.com/galaxy-future/metrics-go v0.2.1-0.20220208040422-88d32e679dd5
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/protobuf v1.5.2
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
@@ -15,7 +15,7 @@ require (
 	github.com/spf13/cast v1.4.1
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.21.0
 	google.golang.org/protobuf v1.27.1
 	gorm.io/driver/mysql v1.2.2
 	gorm.io/gorm v1.22.4
