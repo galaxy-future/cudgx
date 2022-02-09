@@ -1,4 +1,5 @@
 IMAGE_VERSION=v0.7
+REPO_URL=172.16.16.172:12380
 
 vet:
 	@echo "go vet ."
@@ -40,38 +41,38 @@ benchmark:
 docker: docker-gateway docker-consumer docker-pi docker-benchmark docker-api buildsucc
 
 docker-gateway: gateway
-	@docker build -f docker/gateway.Dockerfile .  -t 172.16.16.172:12380/cudgx/gateway:$(IMAGE_VERSION)
+	@docker build -f docker/gateway.Dockerfile .  -t $(REPO_URL)/cudgx/gateway:$(IMAGE_VERSION)
 
 docker-consumer: consumer
-	@docker build -f docker/consumer.Dockerfile  .  -t 172.16.16.172:12380/cudgx/consumer:$(IMAGE_VERSION)
+	@docker build -f docker/consumer.Dockerfile  .  -t $(REPO_URL)/cudgx/consumer:$(IMAGE_VERSION)
 
 docker-api: api
-	@docker build -f docker/api.Dockerfile  .  -t 172.16.16.172:12380/cudgx/api:$(IMAGE_VERSION)
+	@docker build -f docker/api.Dockerfile  .  -t $(REPO_URL)/cudgx/api:$(IMAGE_VERSION)
 
 docker-pi: pi
-	@docker build -f docker/pi.Dockerfile . -t 172.16.16.172:12380/cudgx/sample-pi:$(IMAGE_VERSION)
+	@docker build -f docker/pi.Dockerfile . -t $(REPO_URL)/cudgx/sample-pi:$(IMAGE_VERSION)
 
 docker-benchmark: benchmark
-	@docker build -f docker/benchmark.Dockerfile . -t 172.16.16.172:12380/cudgx/sample-benchmark:$(IMAGE_VERSION)
+	@docker build -f docker/benchmark.Dockerfile . -t $(REPO_URL)/cudgx/sample-benchmark:$(IMAGE_VERSION)
 
 
 docker-push: docker push-gateway push-consumer push-pi push-api push-benchmark
 
 
 push-gateway: docker-gateway
-	docker push 172.16.16.172:12380/cudgx/gateway:$(IMAGE_VERSION)
+	docker push $(REPO_URL)/cudgx/gateway:$(IMAGE_VERSION)
 
 push-consumer: docker-consumer
-	docker push 172.16.16.172:12380/cudgx/consumer:$(IMAGE_VERSION)
+	docker push $(REPO_URL)/cudgx/consumer:$(IMAGE_VERSION)
 
 push-api: docker-api
-	docker push 172.16.16.172:12380/cudgx/api:$(IMAGE_VERSION)
+	docker push $(REPO_URL)/cudgx/api:$(IMAGE_VERSION)
 
 push-pi: docker-pi
-	docker push 172.16.16.172:12380/cudgx/sample-pi:$(IMAGE_VERSION)
+	docker push $(REPO_URL)/cudgx/sample-pi:$(IMAGE_VERSION)
 
 push-benchmark: docker-benchmark
-	docker push 172.16.16.172:12380/cudgx/sample-benchmark:$(IMAGE_VERSION)
+	docker push $(REPO_URL)/cudgx/sample-benchmark:$(IMAGE_VERSION)
 
 # Quick start
 # Pull images from dockerhub and run
