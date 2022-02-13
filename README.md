@@ -1,7 +1,10 @@
 ![画板备份 9](https://user-images.githubusercontent.com/94337797/148376608-8cc8efe6-dd60-44db-9eb3-e7e93dc329c3.png)
 -------
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/galaxy-future/cudgx)](https://goreportcard.com/report/github.com/galaxy-future/cudgx)
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/galaxy-future/BridgX)](https://goreportcard.com/report/github.com/galaxy-future/BridgX) &nbsp;
+[![CodeFactor](https://www.codefactor.io/repository/github/galaxy-future/bridgx/badge)](https://www.codefactor.io/repository/github/galaxy-future/bridgx)
+
 
 Language
 ----
