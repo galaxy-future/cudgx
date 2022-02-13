@@ -3,157 +3,162 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/galaxy-future/cudgx)](https://goreportcard.com/report/github.com/galaxy-future/cudgx)
 
-
-简介
---------
-
-CudgX是星汉未来推出的面向云原生时代的AIOps智能运维引擎，它通过各类服务的多维度、大数据量的数据收集及机器学习训练分析，对各种服务进行指标化、数字化度量，并基于部署的训练模型，对服务质量进行实时度量从而实现对算力、存储、网络等基础资源的自动化、智能化实时动态调度。
-
-主要特性:<br>
-1、支持服务日志记录和聚合计算；<br>
-2、支持自动化压测；<br>
-3、支持实时容量评估；<br>
-4、支持自动化、智能化的算力弹性调度；<br>
-5、提供mesh agent SDK代理接入；<br>
-6、支持Web服务指标的自动化测量，以及自动扩缩容；<br>
-7、开放的指标定义平台，合作伙伴可以基于开放平台进行个性化指标配置；<br>
-
-联系我们
+Language
 ----
-[微博](https://weibo.com/galaxyfuture) | [知乎](https://www.zhihu.com/org/xing-yi-wei-lai) | [B站](https://space.bilibili.com/2057006251)
-| [微信公众号](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat_official_account.md)
-| [企业微信交流群](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat.md)
+
+English | [中文](https://github.com/galaxy-future/cudgx/blob/master/docs/CH-README.md)
+
+Introduction
+-----
+CudgX is an AIOps intelligent operation & maintenance engine for the cloud-native era launched by Galaxy Future, it indexes and digitally measures various services through multi-dimensional big-data collection and machine learning training analysis. Based on the deployed training model, the real-time measurement of service quality could achieve the automated and intelligent real-time dynamic scheduling of computing power, storage, network, and other basic resources. 
 
 
-系统架构
+
+Main Features:<br>
+1.	Support service logging record and aggregate computing；<br>
+2.	Support automatic pressure measurement 
+3.	Support real-time capacity evaluation 
+4.	Support automatic, intelligent computing-force elastic schedule
+5.	Provide agency access to mesh agent SDK
+6.	Support automatic measurement and Auto Scaling of Web service metric
+7.	With the open platform of metrics definition, partners could configure customized metrics based on the platform.
+
+
+Contact Us
+----
+
+[Weibo](https://weibo.com/galaxyfuture) | [Zhihu](https://www.zhihu.com/org/xing-yi-wei-lai) | [Bilibili](https://space.bilibili.com/2057006251)
+| [WeChat Official Account](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat_official_account.md)
+| [WeCom Communication Group](https://github.com/galaxy-future/comandx/blob/main/docs/resource/wechat.md)
+
+
+System Architecture
 --------
 
-* 系统架构图
+* System Architecture Diagram
 
-  ![cudgx_arch](./images/cudgx_arch.png)
+<img width="839" alt="image" src="https://user-images.githubusercontent.com/94337797/153759267-c96e8a8f-9771-4f53-b20a-22cc7a45917b.png">
 
-* 系统模块说明
+
+* System Module Description
+
   * cudgx-api：
-    * predict-rules： 负责维护扩缩容规则信息。
-    * redundancy-keeper： 负责服务集群冗余度保持。
-  * cudgx-gateway： 负责收集`metrics-go`上报的打点数据，并将数据分发到Kafka。
-  * cudgx-consumer： 负责消费kafka数据，存储至clickhouse。
-  * metrics-go： cudgx打点SDK。
+    * predict-rules： Responsible for maintaining Scaling rules.
 
-系统图例
+    * redundancy-keeper： Responsible for maintaining the redundancy of service clusters.
+
+  * cudgx-gateway： Responsible for collecting dotting data from `metrics-go` and distributing it to Kafka.
+  * cudgx-consumer： Responsible for consuming Kafka data, and storing it in clickhouse.
+  * metrics-go： CudgX dots SDK.
+
+System Diagram Legends
 --------
-- 查看服务监控相关图例： `冗余度走势` `QPS` `机器数` 图。
-- 查看服务扩缩记录。
-- 示例：
+- View Service Monitoring Legends: Redundancy Trends, QPS, Machine Amount 
+- View record of service scaling 
+- Example:
 
-    ![sample_4](./images/sample_4.png)
-  
+<img width="713" alt="image" src="https://user-images.githubusercontent.com/94337797/153759376-b2fa4699-c439-4d3e-b513-029971126512.png">
 
-安装部署
---------
 
-1、配置要求
+Installation and Deployment 
+----
+1.	Configuration Requirements
+To ensure the stable running of the system, it is recommended that the system has 2 cores and 4 GB memory storage; CudgX has been installed and tested in Linux and MacOS.  
 
-为了系统稳定运行，建议系统型号2核4G内存；CudgX已经在Linux系统以及macOS系统进行了安装和测试。
+2.	Environment Dependency 
+Before installing CudgX, please install:
+-	BridgX: Please install BridgX according to [BridgX installation Guide](https://github.com/galaxy-future/bridgx/blob/master/README.md). The intranet deployment environment must be able to communicate with the cloud vendor’s VPC
+-	SchedulX: Please install SchedulX according to the [SchedulX installation Guide](https://github.com/galaxy-future/schedulx/blob/master/README.md). The intranet deployment environment must be able to communicate with the cloud vendor’s VPC
+-	ComandX: If front-end operations are required, please install ComandX according to the [ComandX installation Guide] (https://github.com/galaxy-future/comandx/blob/main/README.md).
 
-2、环境依赖
 
-安装CudgX前，请先安装：
-
- BridgX：请根据[BridgX安装指南](https://github.com/galaxy-future/bridgx/blob/master/README.md) 安装BridgX。要求内网部署环境，能够跟云厂商vpc连通。
-
- SchedulX： 请根据[SchedulX安装指南](https://github.com/galaxy-future/schedulx/blob/master/README.md) 安装SchedulX。要求内网部署环境，能够跟云厂商vpc连通。
-
- ComandX： 如果需要进行前端操作，请根据[ComandX安装指南](https://github.com/galaxy-future/comandx/blob/main/README.md) 安装ComandX。
-
-3、安装步骤
-
-* (1)源码下载
-    - 后端工程：
+3.	Installment Steps
+* (1) Download the source code:
+   - Back-end engineering:
   > `git clone https://github.com/galaxy-future/cudgx.git`
 
-* (2)macOS（仅支持intel芯片）系统安装部署
-    - 后端部署,在CudgX目录下运行
+* (2)MacOS(intel chip only) system installation and deployment 
+
+    - Back-end deployment, running in CudgX directory
+
       > `make docker-run-mac`
 
-* (3)Linux系统安装部署
-    - 1）针对使用者
-        - 后端部署,在CudgX目录下运行
+* (3)Linux system installation and deployment 
+
+    - 1）For users:
+
+        - Back-end deployment, running in CudgX directory 
+
           > `make docker-run-linux`
 
-    - 2）针对开发者
-        - 由于项目会下载所需的必需基础镜像,建议将下载源码放到空间大于10G以上的目录中。
-        - 后端部署
-            - CudgX依赖mysql & kafka & clickhouse组件，
-                - 如果使用内置的mysql & etcd & clickhouse，则进入CudgX根目录，则使用以下命令：
-                  > docker-compose up -d    //启动CudgX服务 <br>
-                  > docker-compose down    //停止CudgX服务  <br>
-                - 如果已经有了外部的mysql & etcd & clickhouse服务，则可以到 `cd conf` 下修改`api.json` `gateway.json` `consumer.json`文件中对应组件的ip和port配置信息,然后进入Cudgx的根目录，使用以下命令:
-                  > docker-compose up -d api    //启动api服务 <br>
-                  > docker-compose up -d gateway //启动gateway服务 <br>
-                  > docker-compose up -d consumer //启动consumer服务 <br>
-                  > docker-compose down     //停止CudgX服务
+    - 2）For developers 
 
-* (4)前端页面
+        - Since the project will download the required basic images, it is recommended to place the downloaded source code in a directory that is larger than 10 GB
+        - Back-end deployment
+            - CudgX relies on mysql & kafka & clickhouse artifact,
+                - If use the built-in mysql & etcd & clickhouse, access the CudgX root directory, and use the following command:
+
+                  > docker-compose up -d    //start up CudgX <br>
+                  > docker-compose down    //stop CudgX  <br>
+                - If already have external mysql & etcd & clickhouse service, go to  `cd conf` and change the IP and port configuration information for the corresponding artifacts of `api.json` `gateway.json` `consumer.json`, then go to the root directory of CudgX, use the following command:
+                  > docker-compose up -d api    //start up api <br>
+                  > docker-compose up -d gateway //tart up gateway <br>
+                  > docker-compose up -d consumer //tart up consumer <br>
+                  > docker-compose down     //stop CudgX
+
+* (4)Front-end page
         
-  - 如果需要进行前端操作，请安装[ComandX](https://github.com/galaxy-future/comandx/blob/main/README.md)
-    - 系统运行后，浏览器输入 `http://127.0.0.1` 可以看到管理控制台界面,初始用户名 root 和密码为123456。
+  - If front-end operations are required, please install [ComandX](https://github.com/galaxy-future/comandx/blob/main/README.md)
+    -	After the system runs, enter 'http://127.0.0.1' to view the management console page. The initial username is “root” and the password is “123456”.
+
 
 * (5)metrics-go
-    - 1）需要将目标应用基于CudgX-SDK [metrics-go](https://github.com/galaxy-future/metrics-go/blob/master/README.md) 埋点，完成打点数据上传。
-      我们已经提供了一个sample应用 `cudgx-sample-pi` 用于测试： cudgx-sample-pi 应用已经基于 [metrics-go](https://github.com/galaxy-future/metrics-go/blob/master/README.md) 完成埋点操作。并且docker镜像 `galaxyfuture/cudgx-sample-pi` 已推送至docker hub。
+    - 1）To complete uploading the data, the target application should dot based on CudgX-SDK [metrics-go](https://github.com/galaxy-future/metrics-go/blob/master/README.md), we have provided a sample application `cudgx-sample-pi` for testing: The `cudgx-sample-pi` application has been buried based on metrics-go, and the docker image `galaxyfuture/cudgx-sample-pi` has been pushed to docker hub. 
     
-    - 2）通过SchedulX完成服务部署，此处参考SchedulX创建服务流程
-      - 关键配置：
-        - ComandX页面-服务部署-创建扩缩容流程-镜像部署-服务启动命令： 
+    
+    - 2）Completing service deployment through SchedulX, see the process of creating SchedulX services. 
+
+      - Key Deployment:
+
+        - ComandX Page - Service Deployment - Create Scaling Process – Image Deployment – Services Startup Command:
             > docker run -d -e CUDGX_SERVICE_NAME=test.cudgx.gf -e CUDGX_CLUSTER_NAME=default -e CUDGX_GATEWAY_URL=http://127.0.0.1:8080 -p 80:8090  
         
-            环境变量参数说明：   
-          - CUDGX_SERVICE_NAME： 服务名称
-          - CUDGX_CLUSTER_NAME： 集群名称
-          - CUDGX_GATEWAY_URL： CudgX-gateway服务地址
+            Environment Variables Parameter Description：
+ 
+          - CUDGX_SERVICE_NAME： Sverice Name
+          - CUDGX_CLUSTER_NAME： Cluster Name
+          - CUDGX_GATEWAY_URL： CudgX-gateway Service IP address
 
-        - ComandX页面-服务部署-创建扩缩容流程-流量接入-配置SLB id： 接入阿里云SLB
+        - ComandX Page-Service Deployment - Create Scaling Process – Traffic Access – Configure SLB ID: Connect to Ali cloud SLB.
   
-    - 3）配置扩缩容规则
+    - 3）Rules of Scaling Configuration
       
-      - 关键配置
-        - ComandX页面-服务部署-扩缩容规则
+      - Key Configuration
+        - ComandX Page – Service Deployment – Scaling Rules 
 
-    - 4）向 {SLB IP}:{SLB PORT}/pi 接口施压
-        推荐两种方式：
-      - a：测试过程中我们提供了 `cudgx-sample-benchmark` 应用，用作模拟访问流量。docker镜像 `galaxyfuture/cudgx-sample-benchmark`， 已推送至docker hub。
+
+    - 4）Two Methods are recommended for pressuring {SLB IP}:{SLB PORT}/pi Interface
+   
+      - a：During the test, we provided `cudgx-sample-benchmark` application to simulate access traffic. Docker images `galaxyfuture/cudgx-sample-benchmark` has been pushed to docker hub
         
         > docker run -d --name cudgx_sample_benchmark --network host galaxyfuture/cudgx-sample-benchmark --gf.cudgx.sample.benchmark.sever-address={SLB IP}:{SLB PORT}/pi
             
-      - b：借助开源接口测试工具，向 {SLB IP}:{SLB PORT}/pi 接口施压。
+      - b：By using opensource interface testing tools, apply pressure to {SLB IP}:{SLB PORT}/pi 
 
-    - 5）ComandX页面-服务列表-集群监控
-      - 查看服务监控相关图例： `冗余度走势` `QPS` `机器数` 图。
-      - 查看服务扩缩记录。     
+    - 5）ComandX Page- Service List – Cluster Monitoring 
+      - View service monitoring legends: Redundancy Trends, QPS, Machine Amount 
+      -	View service scaling records    
 
-视频教程
+
+
+
+
+Code of Conduct
 ------
-[ComandX安装](https://www.bilibili.com/video/BV1n34y167o8/) <br>
-[添加云账户](https://www.bilibili.com/video/BV1Jr4y1S7q4/)  <br>
-[创建集群](https://www.bilibili.com/video/BV1Wb4y1v7jw/)   <br>
-[手动扩缩容](https://www.bilibili.com/video/BV1bm4y197QD/)  <br>
-[K8s集群创建与Pod切割](https://www.bilibili.com/video/BV1FY411p7rE/)<br>
+[Contributor Convention](https://github.com/galaxy-future/cudgx/blob/master/CODE_OF_CONDUCT.md)
 
-
-技术文章
-------
-[《云原生技术如何每分钟级迁移TB级数据》](https://zhuanlan.zhihu.com/p/442746588)<br>
-[《企业迁移到K8s的最佳实践》](https://zhuanlan.zhihu.com/p/445131885) <br>
-[《来自一线大厂的十大云原生成本优化手段》](https://zhuanlan.zhihu.com/p/448405809)<br>
-
-
-行为准则
-------
-[贡献者公约](https://github.com/galaxy-future/cudgx/blob/master/CODE_OF_CONDUCT.md)
-
-授权
+Authorization
 -----
 
-CudgX使用[Elastic License 2.0](https://github.com/galaxy-future/cudgx/blob/master/LICENSE)授权协议进行授权
+CudgX uses [Elastic License 2.0](https://github.com/galaxy-future/cudgx/blob/master/LICENSE) Agreement for Authorization.
 
