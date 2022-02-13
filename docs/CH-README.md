@@ -1,12 +1,16 @@
 ![画板备份 9](https://user-images.githubusercontent.com/94337797/148376608-8cc8efe6-dd60-44db-9eb3-e7e93dc329c3.png)
 -------
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/galaxy-future/cudgx)](https://goreportcard.com/report/github.com/galaxy-future/cudgx)
+[![Go Report Card](https://goreportcard.com/badge/github.com/galaxy-future/BridgX)](https://goreportcard.com/report/github.com/galaxy-future/BridgX) &nbsp;
+[![CodeFactor](https://www.codefactor.io/repository/github/galaxy-future/bridgx/badge)](https://www.codefactor.io/repository/github/galaxy-future/bridgx)
 
+语言(language)
+----
+
+中文 | [English](https://github.com/galaxy-future/cudgx/blob/master/README.md)
 
 简介
 --------
-
 CudgX是星汉未来推出的面向云原生时代的AIOps智能运维引擎，它通过各类服务的多维度、大数据量的数据收集及机器学习训练分析，对各种服务进行指标化、数字化度量，并基于部署的训练模型，对服务质量进行实时度量从而实现对算力、存储、网络等基础资源的自动化、智能化实时动态调度。
 
 主要特性:<br>
