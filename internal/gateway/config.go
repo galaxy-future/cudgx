@@ -24,6 +24,13 @@ type Config struct {
 	StreamingRoute  *MessageRouteConfig   `json:"streaming_route"`
 	Producer        *kafka.ProducerConfig `json:"producer"`
 	Database        *rule.MysqlOption     `json:"database"`
+	Xclient         *Xclient              `json:"xclient"`
+}
+
+//Xclient bridgx/schedulx连接配置
+type Xclient struct {
+	BridgxServerAddress   string `json:"bridgx_server_address"`
+	SchedulxServerAddress string `json:"schedulx_server_address"`
 }
 
 type MessageRouteConfig struct {
@@ -48,8 +55,8 @@ func GetGateway() *Gateway {
 
 func Init(configFilename string) (err error) {
 	g, err = NewFromConfigFile(configFilename)
-	clients.InitializeBridgxClient(g.Xclient.BridgxServerAddress)
-	clients.InitializeSchedulxClient(g.Xclient.SchedulxServerAddress)
+	clients.InitializeBridgxClient(g.entriesConfig.Xclient.BridgxServerAddress)
+	clients.InitializeSchedulxClient(g.entriesConfig.Xclient.SchedulxServerAddress)
 	return
 }
 
