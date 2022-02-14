@@ -1,4 +1,4 @@
-package xclient
+package clients
 
 type ExpandAndShrinkResponse struct {
 	Code int64  `json:"code"`

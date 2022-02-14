@@ -34,7 +34,7 @@
     }
   },
   "database": {
-    "dsn": "gf:db@galaxy-future.com@tcp(127.0.0.1:3336)/cudgx?charset=utf8mb4&parseTime=True&loc=Local",
+    "dsn": "gf:db@galaxy-future.com@tcp(127.0.0.1:3306)/cudgx?charset=utf8mb4&parseTime=True&loc=Local",
     "refresh_seconds": 5
   }
 

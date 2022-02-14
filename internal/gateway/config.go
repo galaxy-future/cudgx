@@ -2,12 +2,12 @@ package gateway
 
 import (
 	"encoding/json"
+	"github.com/galaxy-future/cudgx/common/kafka"
+	"github.com/galaxy-future/cudgx/internal/clients"
+	"github.com/galaxy-future/cudgx/internal/gateway/rule"
 	"io/ioutil"
 	"os"
 	"strings"
-
-	"github.com/galaxy-future/cudgx/common/kafka"
-	"github.com/galaxy-future/cudgx/internal/gateway/rule"
 )
 
 var g *Gateway
@@ -48,6 +48,8 @@ func GetGateway() *Gateway {
 
 func Init(configFilename string) (err error) {
 	g, err = NewFromConfigFile(configFilename)
+	clients.InitializeBridgxClient(g.Xclient.BridgxServerAddress)
+	clients.InitializeSchedulxClient(g.Xclient.SchedulxServerAddress)
 	return
 }
 

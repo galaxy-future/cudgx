@@ -1,4 +1,4 @@
-package xclient
+package clients
 
 import (
 	"encoding/json"
