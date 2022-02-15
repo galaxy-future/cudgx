@@ -5,7 +5,7 @@ import (
 	"github.com/galaxy-future/cudgx/internal/predict/query"
 )
 
-//QueryRedundancy 基于QPS查询系统冗余度
+//QueryRedundancy 查询系统冗余度
 func QueryRedundancy(serviceName, clusterName, metricName string, benchmark float64, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
 	//TODO 根绝trimmedSecond区分是否视图，还是redundancyKeeper定义有些模糊
 	if trimmedSecond != 1 {
@@ -14,7 +14,7 @@ func QueryRedundancy(serviceName, clusterName, metricName string, benchmark floa
 			return series, nil
 		}
 	}
-	samples, err := query.AverageMetric(serviceName, clusterName, metricName, begin, end)
+	samples, err := query.AverageMetricByVM(serviceName, clusterName, metricName, begin, end)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func QueryRedundancy(serviceName, clusterName, metricName string, benchmark floa
 	return series, nil
 }
 
-//QueryServiceTotalMetric 基于QPS查询系统冗余度
+//QueryServiceTotalMetric 查询指标数据
 func QueryServiceTotalMetric(serviceName, clusterName, metricName string, begin, end int64, trimmedSecond int64) (*RedundancySeries, error) {
 	//TODO 根绝trimmedSecond区分是否视图，还是redundancyKeeper定义有些模糊
 	if trimmedSecond != 1 {
@@ -44,7 +44,7 @@ func QueryServiceTotalMetric(serviceName, clusterName, metricName string, begin,
 			return series, nil
 		}
 	}
-	samples, err := query.TotalMetric(serviceName, clusterName, metricName, begin, end)
+	samples, err := query.TotalMetricByVM(serviceName, clusterName, metricName, begin, end)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func QueryInstancesByMetric(serviceName, clusterName, metricName string, begin, 
 			return series, nil
 		}
 	}
-	samples, err := query.InstanceCountByMetric(serviceName, clusterName, metricName, begin, end)
+	samples, err := query.InstanceCountByVM(serviceName, clusterName, metricName, begin, end)
 	if err != nil {
 		return nil, err
 	}

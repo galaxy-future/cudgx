@@ -40,14 +40,10 @@ func InitializeByConfig(theConfig *config.Config) error {
 		theConfig.Predict.MetricSendDuration = types.Duration{Duration: 5 * time.Second}
 	}
 
-	err := clients.InitClickhouseRdCli(theConfig.Clickhouse)
-	if err != nil {
-		return err
-	}
 	predictor = &Predictor{
 		config: theConfig.Predict,
 	}
-	err = clients.InitDBClient(theConfig.Database)
+	err := clients.InitDBClient(theConfig.Database)
 	if err != nil {
 		return err
 	}

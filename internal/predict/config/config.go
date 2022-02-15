@@ -8,6 +8,7 @@ import (
 
 	"github.com/galaxy-future/cudgx/common/clickhouse"
 	"github.com/galaxy-future/cudgx/common/types"
+	"github.com/galaxy-future/cudgx/common/victoriametrics"
 )
 
 //Config 预测器配置
@@ -20,6 +21,8 @@ type Config struct {
 	Database *Database `json:"database"`
 	//xclient 连接配置
 	Xclient *Xclient `json:"xclient"`
+	//VictoriaMetrics 连接配置
+	VictoriaMetrics *victoriametrics.Config `json:"victoria_metrics"`
 }
 
 //Xclient bridgx/schedulx连接配置

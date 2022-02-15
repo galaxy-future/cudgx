@@ -7,8 +7,10 @@ import (
 
 	"github.com/galaxy-future/cudgx/cmd/api/handler"
 	"github.com/galaxy-future/cudgx/common/logger"
+	"github.com/galaxy-future/cudgx/common/victoriametrics"
 	"github.com/galaxy-future/cudgx/internal/predict"
 	"github.com/galaxy-future/cudgx/internal/predict/config"
+	"github.com/galaxy-future/cudgx/internal/predict/query"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -33,6 +35,9 @@ func main() {
 		panic(err)
 	}
 
+	reader := victoriametrics.NewReader(theConfig.VictoriaMetrics)
+	query.Reader = reader
+
 	go predict.StartRedundancyKeeper(context.Background())
 
 	r := gin.New()
@@ -46,12 +51,12 @@ func main() {
 	r.GET("/ping", func(context *gin.Context) {
 		context.String(200, "cudgx/api-service is running")
 	})
-	redundancyGroup := r.Group("/api/v1/query/redundancy")
-	{
-		redundancyGroup.GET("/qps_average", handler.QueryRedundancyByQPS)
-		redundancyGroup.GET("/instance_count", handler.QueryInstanceCountByQPSMetrics)
-		redundancyGroup.GET("/qps_total", handler.QueryTotalQPS)
-	}
+	//redundancyGroup := r.Group("/api/v1/query/redundancy")
+	//{
+	//	redundancyGroup.GET("/qps_average", handler.QueryRedundancyByQPS)
+	//	redundancyGroup.GET("/instance_count", handler.QueryInstanceCountByQPSMetrics)
+	//	redundancyGroup.GET("/qps_total", handler.QueryTotalQPS)
+	//}
 	metricGroup := r.Group("/api/v1/query/metric")
 	{
 		metricGroup.GET("/redundancy/:metric_name", handler.QueryRedundancy)
