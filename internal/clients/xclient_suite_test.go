@@ -1,9 +1,9 @@
 package clients_test
 
 import (
-	"github.com/galaxy-future/cudgx/internal/clients"
 	"testing"
 
+	"github.com/galaxy-future/cudgx/internal/clients"
 	"github.com/onsi/ginkgo"
 	"github.com/onsi/gomega"
 )

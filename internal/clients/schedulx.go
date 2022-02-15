@@ -175,7 +175,7 @@ func validateNames(serviceName, clusterName string) error {
 
 // GetServiceByIp 通过 ip 获取服务名称.
 func GetServiceByIp(ip string) (GetServiceByIpData, error) {
-	resp, err := schedulxClient.HttpClient.Get(fmt.Sprintf("%s/api/v1/schedulx/instance/service?ip_inner=%s",schedulxClient.ServerAddress, ip))
+	resp, err := schedulxClient.HttpClient.Get(fmt.Sprintf("%s/api/v1/schedulx/instance/service?ip_inner=%s", schedulxClient.ServerAddress, ip))
 	if err != nil {
 		return GetServiceByIpData{}, err
 	}
