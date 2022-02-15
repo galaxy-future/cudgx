@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2
+	github.com/golang/snappy v0.0.4 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/mailru/go-clickhouse v1.8.0
 	github.com/mattn/go-isatty v0.0.14 // indirect

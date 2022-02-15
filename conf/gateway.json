@@ -38,7 +38,7 @@
     "refresh_seconds": 5
   },
   "xclient": {
-    "bridgx_server_address": "http://127.0.0.1:9090",
+    "bridgx_server_address": "http://127.0.0.1:9000",
     "schedulx_server_address": "http://127.0.0.1:9091"
   }
 }

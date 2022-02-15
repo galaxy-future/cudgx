@@ -1,14 +1,14 @@
 package handler
 
 import (
-	"fmt"
-	"github.com/galaxy-future/cudgx/internal/predict/xclient"
+	"github.com/galaxy-future/cudgx/internal/clients"
 	"io/ioutil"
 
 	"github.com/galaxy-future/cudgx/common/mod"
 	"github.com/galaxy-future/cudgx/internal/gateway"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
+	"github.com/golang/snappy"
 	"github.com/prometheus/prometheus/prompb"
 )
 
@@ -80,29 +80,30 @@ func HandlerStreamingMessageBatch(c *gin.Context) {
 func RemoteWrite(c *gin.Context) {
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		c.JSON(400, gin.H{"message": "read body failed"})
+		c.JSON(400, gin.H{"message": "read body failed", "error": err.Error()})
+		return
+	}
+	reqBuf, err := snappy.Decode(nil, body)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "read body failed", "error": err.Error()})
 		return
 	}
 	req := &prompb.WriteRequest{}
-	err = req.Unmarshal(body)
+	err = req.Unmarshal(reqBuf)
 	if err != nil {
-		c.JSON(400, gin.H{"message": "read unmarshal request failed"})
+		c.JSON(400, gin.H{"message": "read unmarshal request failed", "error": err.Error()})
 		return
 	}
 	ip := c.ClientIP()
-	for _, timeSerie := range req.Timeseries {
-		fmt.Println(timeSerie.GetSamples())
-		fmt.Println(timeSerie.GetLabels())
-	}
-	service, err := xclient.GetServiceByIp(ip)
+	service, err := clients.GetServiceByIp(ip)
 	if err != nil {
-		c.JSON(400, gin.H{"message": "wrong ip"})
+		c.JSON(400, gin.H{"message": "wrong ip", "error": err.Error()})
 		return
 	}
 	msgs := make([]*mod.StreamingMessage, 0, len(req.Timeseries))
 	writer, err := gateway.GetGateway().GetStreamingWriter(service.ServiceName, "")
 	if err != nil {
-		c.JSON(500, gin.H{"message": "get kafka client failed "})
+		c.JSON(500, gin.H{"message": "get kafka client failed ", "error": err.Error()})
 		return
 	}
 	data := &mod.StreamingBatch{
@@ -112,7 +113,7 @@ func RemoteWrite(c *gin.Context) {
 	}
 	bData, err := proto.Marshal(data)
 	if err != nil {
-		c.JSON(400, gin.H{"message": "StreamingBatch marshal failed"})
+		c.JSON(400, gin.H{"message": "StreamingBatch marshal failed", "error": err.Error()})
 		return
 	}
 	writer.SendMessage(service.ServiceName, "", bData)
