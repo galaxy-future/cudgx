@@ -1,4 +1,4 @@
-package xclient
+package clients
 
 type ExpandAndShrinkResponse struct {
 	Code int64  `json:"code"`
@@ -46,4 +46,15 @@ type ServiceCluster struct {
 	Description        string `json:"description"`
 	AutoDecision       string `json:"auto_decision"`
 	TaskTypeStatus     string `json:"task_type_status"`
+}
+
+type ServiceByIpResponse struct {
+	Code int64              `json:"code"`
+	Msg  string             `json:"msg"`
+	Data GetServiceByIpData `json:"data"`
+}
+
+type GetServiceByIpData struct {
+	ServiceName string `json:"service_name"`
+	ClusterName string `json:"cluster_name"`
 }

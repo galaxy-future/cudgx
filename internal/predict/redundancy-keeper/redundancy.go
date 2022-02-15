@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/galaxy-future/cudgx/common/logger"
+	"github.com/galaxy-future/cudgx/internal/clients"
 	"github.com/galaxy-future/cudgx/internal/predict/config"
 	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	"github.com/galaxy-future/cudgx/internal/predict/model"
 	"github.com/galaxy-future/cudgx/internal/predict/service"
-	"github.com/galaxy-future/cudgx/internal/predict/xclient"
 	"go.uber.org/zap"
 )
 
@@ -95,7 +95,7 @@ func scheduleRule(rule *model.PredictRule) error {
 		return err
 	}
 
-	canSchedule, err := xclient.CanServiceSchedule(serviceName, clusterName)
+	canSchedule, err := clients.CanServiceSchedule(serviceName, clusterName)
 	if err != nil {
 		return fmt.Errorf("query service schedule failed , %w", err)
 	}
@@ -103,7 +103,7 @@ func scheduleRule(rule *model.PredictRule) error {
 		return nil
 	}
 
-	currentCount, err := xclient.GetServiceInstanceCount(serviceName, clusterName)
+	currentCount, err := clients.GetServiceInstanceCount(serviceName, clusterName)
 	if err != nil {
 		return fmt.Errorf("query service instance count failed , %w", err)
 	}
@@ -145,7 +145,7 @@ func scheduleRule(rule *model.PredictRule) error {
 			if countToChange > 30 {
 				countToChange = 30
 			}
-			err := xclient.ExpandService(serviceName, clusterName, countToChange)
+			err := clients.ExpandService(serviceName, clusterName, countToChange)
 			if err != nil {
 				return fmt.Errorf("expand service failed , %w", err)
 			}
@@ -157,7 +157,7 @@ func scheduleRule(rule *model.PredictRule) error {
 			if countToChange > 30 {
 				countToChange = 30
 			}
-			err := xclient.ShrinkService(serviceName, clusterName, countToChange)
+			err := clients.ShrinkService(serviceName, clusterName, countToChange)
 			if err != nil {
 				return fmt.Errorf("shrink service failed , %w", err)
 			}

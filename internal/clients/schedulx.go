@@ -1,4 +1,4 @@
-package xclient
+package clients
 
 import (
 	"encoding/json"
@@ -171,4 +171,28 @@ func validateNames(serviceName, clusterName string) error {
 		return fmt.Errorf("集群名称不能为空")
 	}
 	return nil
+}
+
+// GetServiceByIp 通过 ip 获取服务名称.
+func GetServiceByIp(ip string) (GetServiceByIpData, error) {
+	resp, err := schedulxClient.HttpClient.Get(fmt.Sprintf("%s/api/v1/schedulx/instance/service?ip_inner=%s", schedulxClient.ServerAddress, ip))
+	if err != nil {
+		return GetServiceByIpData{}, err
+	}
+	defer resp.Body.Close()
+	respData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return GetServiceByIpData{}, err
+
+	}
+	var response ServiceByIpResponse
+	err = json.Unmarshal(respData, &response)
+	if err != nil {
+		return GetServiceByIpData{}, err
+	}
+	if response.Code != http.StatusOK {
+		err = fmt.Errorf("http code:%v | msg:%v", response.Code, response.Msg)
+		return GetServiceByIpData{}, err
+	}
+	return response.Data, nil
 }

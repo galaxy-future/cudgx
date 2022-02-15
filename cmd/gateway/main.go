@@ -37,6 +37,7 @@ func main() {
 	r.GET("/ping", handler.HandlerPing)
 	r.POST("/v1/monitoring/:service/:metric", handler.HandlerMonitoringMessageBatch)
 	r.POST("/v1/streaming/:service/:metric", handler.HandlerStreamingMessageBatch)
+	r.POST("/v1/prom/remote/write", handler.RemoteWrite)
 
 	l, err := net.Listen("tcp", *serverBind)
 	if err != nil {
