@@ -103,7 +103,6 @@ func (consumer *Consumer) commit(cli *http.Client, messages []interface{}) error
 		logger.GetLogger().Error("remote write request failed", zap.Int("status_code", resp.StatusCode))
 		return fmt.Errorf("remote write request failed,status_code:%d", resp.StatusCode)
 	}
-	logger.GetLogger().Info("send success")
 	return nil
 }
 
