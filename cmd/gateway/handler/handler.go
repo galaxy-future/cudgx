@@ -100,13 +100,25 @@ func RemoteWrite(c *gin.Context) {
 		c.JSON(400, gin.H{"message": "wrong ip", "error": err.Error()})
 		return
 	}
-	msgs := make([]*mod.StreamingMessage, 0, len(req.Timeseries))
-	writer, err := gateway.GetGateway().GetStreamingWriter(service.ServiceName, "")
+	msgs := make([]*mod.MetricsMessage, 0, len(req.Timeseries))
+	writer, err := gateway.GetGateway().GetMonitoringWriter(service.ServiceName, "")
 	if err != nil {
 		c.JSON(500, gin.H{"message": "get kafka client failed ", "error": err.Error()})
 		return
 	}
-	data := &mod.StreamingBatch{
+	for _, ts:= range req.Timeseries{
+		labels:= make(map[string]string,len(ts.Labels))
+		for _, label := range ts.Labels{
+			labels[label.Name] = label.Value
+		}
+		msgs = append(msgs, &mod.MetricsMessage{
+			ServiceName:   service.ServiceName,
+			ServiceHost:   ip,
+			ClusterName:   service.ClusterName,
+			Labels:        labels,
+		})
+	}
+	data := &mod.MetricBatch{
 		ServiceName: service.ServiceName,
 		MetricName:  "",
 		Messages:    msgs,
