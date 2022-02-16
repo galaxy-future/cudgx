@@ -3,14 +3,35 @@ package clients
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/sync/singleflight"
 	"io/ioutil"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/galaxy-future/cudgx/common/logger"
 	"github.com/galaxy-future/cudgx/internal/predict/consts"
+	lru "github.com/hashicorp/golang-lru"
 	"go.uber.org/zap"
 )
+
+type LRUCache struct {
+	*lru.Cache
+}
+
+var (
+	cache = newLRUCache(1000)
+	_ = cleanCachePer3Mins()
+	sf    singleflight.Group
+)
+
+func newLRUCache(size int) *LRUCache {
+	l, err := lru.New(size)
+	if err != nil {
+		return nil
+	}
+	return &LRUCache{Cache: l}
+}
 
 func NewSchedulxClient(serverAddress string) *Client {
 	return &Client{
@@ -173,8 +194,13 @@ func validateNames(serviceName, clusterName string) error {
 	return nil
 }
 
-// GetServiceByIp 通过 ip 获取服务名称.
-func GetServiceByIp(ip string) (GetServiceByIpData, error) {
+type localServiceIpCache struct {
+	data   map[string]GetServiceByIpData
+	expire time.Duration
+}
+
+// doGetServiceByIp 通过 ip 获取服务名称.
+func doGetServiceByIp(ip string) (GetServiceByIpData, error) {
 	resp, err := schedulxClient.HttpClient.Get(fmt.Sprintf("%s/api/v1/schedulx/instance/service?ip_inner=%s", schedulxClient.ServerAddress, ip))
 	if err != nil {
 		return GetServiceByIpData{}, err
@@ -195,4 +221,42 @@ func GetServiceByIp(ip string) (GetServiceByIpData, error) {
 		return GetServiceByIpData{}, err
 	}
 	return response.Data, nil
+}
+
+func GetServiceByIp(ip string) (GetServiceByIpData, error) {
+	srv, ok := cache.Get(ip)
+	if ok {
+		d, _ := srv.(GetServiceByIpData)
+		return d, nil
+	}
+
+	data, err, _ := sf.Do(ip, func() (interface{}, error) {
+		res, err := doGetServiceByIp(ip)
+		if err != nil {
+			return nil, err
+		}
+		cache.Add(ip, res)
+		return res, nil
+	})
+	if err != nil {
+		return GetServiceByIpData{}, err
+	}
+	d, _ := data.(GetServiceByIpData)
+	return d, nil
+}
+
+func cleanCachePer3Mins() interface{}{
+	go func() {
+		var l sync.Mutex
+		for {
+			l.Lock()
+			func() {
+				defer l.Unlock()
+				cache.Cache, _ = lru.New(1000)
+				fmt.Println("clean")
+			}()
+			time.Sleep(time.Minute * 3)
+		}
+	}()
+	return nil
 }
