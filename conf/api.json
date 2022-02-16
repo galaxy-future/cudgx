@@ -1,15 +1,4 @@
 {
-  "clickhouse": {
-    "schema": "http",
-    "user": "",
-    "password": "",
-    "hosts": [
-      "127.0.0.1:8123"
-    ],
-    "write_timeout": "60s",
-    "database": "cudgx",
-    "table": "metrics_test"
-  },
   "param": {
     "samples_query_count": 60,
     "predict_minimal_count": 50,

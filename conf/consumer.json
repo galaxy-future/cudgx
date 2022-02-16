@@ -44,22 +44,6 @@
       }
     }
   },
-  "clickhouse": {
-    "schema": "http",
-    "user": "",
-    "password": "",
-    "hosts": ["127.0.0.1:8123"],
-    "write_timeout": "60s",
-    "database": "cudgx",
-    "table": "metrics_test"
-  },
-  "write_config": {
-    "flush_duration": "1s",
-    "backoff": "100ms",
-    "retry_count": 3,
-    "batch_size": 100000,
-    "concurrency": 3
-  },
   "victoria_metrics": {
     "writer": {
       "vm_url": "http://127.0.0.1:8480/insert/0/prometheus/api/v1/write",
