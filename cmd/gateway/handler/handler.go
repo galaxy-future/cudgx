@@ -106,16 +106,24 @@ func RemoteWrite(c *gin.Context) {
 		c.JSON(500, gin.H{"message": "get kafka client failed ", "error": err.Error()})
 		return
 	}
-	for _, ts:= range req.Timeseries{
-		labels:= make(map[string]string,len(ts.Labels))
-		for _, label := range ts.Labels{
+	for _, ts := range req.Timeseries {
+		labels := make(map[string]string, len(ts.Labels))
+		for _, label := range ts.Labels {
 			labels[label.Name] = label.Value
 		}
+		var sampleVal float64
+		var sampleT int64
+		if len(ts.Samples) > 0 {
+			sampleT = ts.Samples[0].Timestamp
+			sampleVal = ts.Samples[0].Value
+		}
 		msgs = append(msgs, &mod.MetricsMessage{
-			ServiceName:   service.ServiceName,
-			ServiceHost:   ip,
-			ClusterName:   service.ClusterName,
-			Labels:        labels,
+			ServiceName: service.ServiceName,
+			ServiceHost: ip,
+			ClusterName: service.ClusterName,
+			Labels:      labels,
+			Timestamp:   sampleT,
+			Value:       sampleVal,
 		})
 	}
 	data := &mod.MetricBatch{
