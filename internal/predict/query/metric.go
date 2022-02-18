@@ -53,7 +53,7 @@ func InstanceCountByMetric(serviceName, clusterName, metricName string, begin, e
 
 //AverageMetricByVM 查询服务/集群的平均Metric值
 func AverageMetricByVM(serviceName, clusterName, metricName string, begin, end int64) (samples []ClusterSample, err error) {
-	promeQL := fmt.Sprintf("sum(%s{serviceName='%s',clusterName='%s'})/count('serviceHost', %s{serviceName='%s',clusterName='%s'}) by(metricName,serviceName,clusterName)", metricName, serviceName, clusterName, metricName, serviceName, clusterName)
+	promeQL := fmt.Sprintf("sum(%s{serviceName='%s',clusterName='%s'})/count(%s{serviceName='%s',clusterName='%s'}) by(metricName,serviceName,clusterName)", metricName, serviceName, clusterName, metricName, serviceName, clusterName)
 	res, err := Reader.QueryRange(promeQL, begin, end, consts.StepDuration)
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func TotalMetricByVM(serviceName, clusterName, metricName string, begin, end int
 
 //InstanceCountByVM 查询服务节点数量
 func InstanceCountByVM(serviceName, clusterName, metricName string, begin, end int64) (samples []ClusterSample, err error) {
-	promeQL := fmt.Sprintf("count('serviceHost',%s{serviceName='%s',clusterName='%s'}) by(metricName,serviceName,clusterName)", metricName, serviceName, clusterName)
+	promeQL := fmt.Sprintf("count(%s{serviceName='%s',clusterName='%s'}) by(metricName,serviceName,clusterName)", metricName, serviceName, clusterName)
 	res, err := Reader.QueryRange(promeQL, begin, end, consts.StepDuration)
 	if err != nil {
 		return nil, err

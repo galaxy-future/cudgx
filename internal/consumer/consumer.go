@@ -78,6 +78,9 @@ func (consumer *Consumer) commit(cli *http.Client, messages []interface{}) error
 	if err != nil {
 		return err
 	}
+	if wirteRequest == nil || len(wirteRequest.Timeseries) == 0 {
+		return nil
+	}
 	data, err := proto.Marshal(wirteRequest)
 	if err != nil {
 		return err
