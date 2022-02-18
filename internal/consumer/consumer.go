@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 	"sync"
-
-	"github.com/galaxy-future/cudgx/internal/consumer/consts"
 
 	"github.com/galaxy-future/cudgx/common/kafka"
 	"github.com/galaxy-future/cudgx/common/logger"
 	"github.com/galaxy-future/cudgx/common/mod"
 	"github.com/galaxy-future/cudgx/common/victoriametrics"
+	"github.com/galaxy-future/cudgx/internal/consumer/consts"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/snappy"
 	"github.com/prometheus/prometheus/prompb"
@@ -90,10 +90,8 @@ func (consumer *Consumer) commit(cli *http.Client, messages []interface{}) error
 	httpReq.Header.Add("Content-Encoding", "snappy")
 	httpReq.Header.Set("Content-Type", "application/x-protobuf")
 	httpReq.Header.Set("X-Prometheus-Remote-Write-Version", "0.1.0")
+	httpReq.Header.Set("Connection", "keep-alive")
 	resp, err := cli.Do(httpReq)
-	if err != nil {
-		return err
-	}
 	defer func() { _ = resp.Body.Close() }()
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -106,79 +104,138 @@ func (consumer *Consumer) commit(cli *http.Client, messages []interface{}) error
 	return nil
 }
 
+func IsEqual(s, d *mod.MetricsMessage) bool {
+	if s.MetricName != d.MetricName {
+		return false
+	}
+	if s.ServiceName != d.ServiceName {
+		return false
+	}
+	if s.ClusterName != d.ClusterName {
+		return false
+	}
+	if s.ServiceHost != d.ServiceHost {
+		return false
+	}
+	if s.ServiceAz != d.ServiceAz {
+		return false
+	}
+	if s.ServiceRegion != d.ServiceRegion {
+		return false
+	}
+	if !reflect.DeepEqual(s.Labels, d.Labels) {
+		return false
+	}
+	return true
+}
+
 func toPromePb(messages []interface{}) (*prompb.WriteRequest, error) {
 	var metricBatch *mod.MetricBatch
 	var items []*prompb.TimeSeries
 	var labels []*prompb.Label
-	var samples []prompb.Sample
+	metricMap := make(map[*mod.MetricsMessage][]prompb.Sample)
+	eq := false
 	for _, m := range messages {
 		metricBatch = &mod.MetricBatch{}
-		items = items[:0]
-		labels = labels[:0]
-		samples = samples[:0]
 		err := proto.Unmarshal(m.([]byte), metricBatch)
 		if err != nil {
 			logger.GetLogger().Error("Message to PromePb failed", zap.Error(err))
 			continue
 		}
+
 		for _, metric := range metricBatch.Messages {
-			if metric.MetricName != "" {
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldMetricName,
-					Value: metric.MetricName,
-				})
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldName,
-					Value: metric.MetricName,
-				})
+			eq = false
+			if len(metricMap) == 0 {
+				metricMap[metric] = []prompb.Sample{
+					{
+						Value:     metric.Value,
+						Timestamp: metric.Timestamp,
+					},
+				}
+				continue
 			}
-			if metric.ServiceName != "" {
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldServiceName,
-					Value: metric.ServiceName,
-				})
+			for m, _ := range metricMap {
+				if IsEqual(m, metric) {
+					metricMap[m] = append(metricMap[m], prompb.Sample{
+						Value:     metric.Value,
+						Timestamp: metric.Timestamp,
+					})
+					eq = true
+					break
+				}
 			}
-			if metric.ClusterName != "" {
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldClusterName,
-					Value: metric.ClusterName,
-				})
+			if !eq {
+				metricMap[metric] = []prompb.Sample{
+					{
+						Value:     metric.Value,
+						Timestamp: metric.Timestamp,
+					},
+				}
 			}
-			if metric.ServiceHost != "" {
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldServiceHost,
-					Value: metric.ServiceHost,
-				})
-			}
-			if metric.ServiceRegion != "" {
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldServiceRegion,
-					Value: metric.ServiceRegion,
-				})
-			}
-			if metric.ServiceAz != "" {
-				labels = append(labels, &prompb.Label{
-					Name:  consts.FieldServiceAz,
-					Value: metric.ServiceAz,
-				})
-			}
-			for key, value := range metric.Labels {
-				labels = append(labels, &prompb.Label{
-					Name:  key,
-					Value: value,
-				})
-			}
-			samples = append(samples, prompb.Sample{
-				Value:     metric.Value,
-				Timestamp: metric.Timestamp,
-			})
-			items = append(items, &prompb.TimeSeries{
-				Labels:  labels,
-				Samples: samples,
-			})
+
 		}
+	}
+
+	for m, ss := range metricMap {
+		labels = labels[:0]
+		labels = transform(m)
+		items = append(items, &prompb.TimeSeries{
+			Labels:  labels,
+			Samples: ss,
+		})
 	}
 	return &prompb.WriteRequest{
 		Timeseries: items,
 	}, nil
+}
+
+func transform(metric *mod.MetricsMessage) []*prompb.Label {
+	var labels []*prompb.Label
+	if metric.MetricName != "" {
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldMetricName,
+			Value: metric.MetricName,
+		})
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldName,
+			Value: metric.MetricName,
+		})
+	}
+	if metric.ServiceName != "" {
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldServiceName,
+			Value: metric.ServiceName,
+		})
+	}
+	if metric.ClusterName != "" {
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldClusterName,
+			Value: metric.ClusterName,
+		})
+	}
+	if metric.ServiceHost != "" {
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldServiceHost,
+			Value: metric.ServiceHost,
+		})
+	}
+	if metric.ServiceRegion != "" {
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldServiceRegion,
+			Value: metric.ServiceRegion,
+		})
+	}
+	if metric.ServiceAz != "" {
+		labels = append(labels, &prompb.Label{
+			Name:  consts.FieldServiceAz,
+			Value: metric.ServiceAz,
+		})
+	}
+	for key, value := range metric.Labels {
+		labels = append(labels, &prompb.Label{
+			Name:  key,
+			Value: value,
+		})
+	}
+	return labels
 }

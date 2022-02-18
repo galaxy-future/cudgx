@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/Shopify/sarama v1.30.1
-	github.com/galaxy-future/metrics-go v0.2.1-0.20220208040422-88d32e679dd5
+	github.com/galaxy-future/metrics-go v0.2.1-0.20220213160929-916e586560ed
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2

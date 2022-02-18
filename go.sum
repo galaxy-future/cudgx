@@ -86,6 +86,12 @@ github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWo
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/galaxy-future/metrics-go v0.2.1-0.20220208040422-88d32e679dd5 h1:E+UDRpg4hNBM+4imCqjIzAtO2sWMjEWQVhNrVLKC0Gg=
 github.com/galaxy-future/metrics-go v0.2.1-0.20220208040422-88d32e679dd5/go.mod h1:oQxmLlkCaCDP8CSPKcnUU+auVy5bJ5dAoGLM3qT9Frs=
+github.com/galaxy-future/metrics-go v0.2.1-0.20220213160929-916e586560ed h1:Dy4RdXRWCMF4PYFLFkw5wv+KEVctqkTabr8zMkQTWlk=
+github.com/galaxy-future/metrics-go v0.2.1-0.20220213160929-916e586560ed/go.mod h1:oQxmLlkCaCDP8CSPKcnUU+auVy5bJ5dAoGLM3qT9Frs=
+github.com/galaxy-future/metrics-go v0.2.1-0.20220218025559-c6436bc7df5d h1:guAj0kmRGLLPr++szBJapFfMFnQnWmMVKjmPqCWF9Uc=
+github.com/galaxy-future/metrics-go v0.2.1-0.20220218025559-c6436bc7df5d/go.mod h1:oQxmLlkCaCDP8CSPKcnUU+auVy5bJ5dAoGLM3qT9Frs=
+github.com/galaxy-future/metrics-go v0.2.1-0.20220218031649-44153524070f h1:Tr0MoOGRI7q03hJffUy5DdbL0OBt8SYXwu2kan5DJ3I=
+github.com/galaxy-future/metrics-go v0.2.1-0.20220218031649-44153524070f/go.mod h1:oQxmLlkCaCDP8CSPKcnUU+auVy5bJ5dAoGLM3qT9Frs=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
 github.com/gin-contrib/sse v0.1.0/go.mod h1:RHrZQHXnP2xjPF+u1gW/2HnVO7nvIa9PG3Gm+fLHvGI=

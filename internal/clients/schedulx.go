@@ -21,7 +21,7 @@ type LRUCache struct {
 
 var (
 	cache = newLRUCache(1000)
-	_ = cleanCachePer3Mins()
+	_     = cleanCachePer3Mins()
 	sf    singleflight.Group
 )
 
@@ -245,7 +245,7 @@ func GetServiceByIp(ip string) (GetServiceByIpData, error) {
 	return d, nil
 }
 
-func cleanCachePer3Mins() interface{}{
+func cleanCachePer3Mins() interface{} {
 	go func() {
 		var l sync.Mutex
 		for {
@@ -253,7 +253,6 @@ func cleanCachePer3Mins() interface{}{
 			func() {
 				defer l.Unlock()
 				cache.Cache, _ = lru.New(1000)
-				fmt.Println("clean")
 			}()
 			time.Sleep(time.Minute * 3)
 		}
