@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/galaxy-future/cudgx/common/logger"
 	"io/ioutil"
 
 	"github.com/galaxy-future/cudgx/common/mod"
@@ -94,22 +95,22 @@ func RemoteWrite(c *gin.Context) {
 		c.JSON(400, gin.H{"message": "read unmarshal request failed", "error": err.Error()})
 		return
 	}
-	ip := c.ClientIP()
-	service, err := clients.GetServiceByIp(ip)
-	if err != nil {
-		c.JSON(400, gin.H{"message": "wrong ip", "error": err.Error()})
-		return
-	}
 	msgs := make([]*mod.MetricsMessage, 0, len(req.Timeseries))
-	writer, err := gateway.GetGateway().GetMonitoringWriter(service.ServiceName, "")
-	if err != nil {
-		c.JSON(500, gin.H{"message": "get kafka client failed ", "error": err.Error()})
-		return
-	}
+	var ip, serviceName, clusterName string
 	for _, ts := range req.Timeseries {
 		labels := make(map[string]string, len(ts.Labels))
 		for _, label := range ts.Labels {
 			labels[label.Name] = label.Value
+			if label.Name == "ip" && ip == ""{
+				ip = label.Value
+				service, err := clients.GetServiceByIp(ip)
+				if err != nil {
+					logger.GetLogger().Sugar().Errorf("GetServiceByIp failed")
+					continue
+				}
+				serviceName = service.ServiceName
+				clusterName = service.ClusterName
+			}
 		}
 		var sampleVal float64
 		var sampleT int64
@@ -117,17 +118,23 @@ func RemoteWrite(c *gin.Context) {
 			sampleT = ts.Samples[0].Timestamp
 			sampleVal = ts.Samples[0].Value
 		}
+
 		msgs = append(msgs, &mod.MetricsMessage{
-			ServiceName: service.ServiceName,
+			ServiceName: serviceName,
 			ServiceHost: ip,
-			ClusterName: service.ClusterName,
+			ClusterName: clusterName,
 			Labels:      labels,
 			Timestamp:   sampleT,
 			Value:       sampleVal,
 		})
 	}
+	writer, err := gateway.GetGateway().GetMonitoringWriter(serviceName, "")
+	if err != nil {
+		c.JSON(500, gin.H{"message": "get kafka client failed ", "error": err.Error()})
+		return
+	}
 	data := &mod.MetricBatch{
-		ServiceName: service.ServiceName,
+		ServiceName: serviceName,
 		MetricName:  "",
 		Messages:    msgs,
 	}
@@ -136,6 +143,6 @@ func RemoteWrite(c *gin.Context) {
 		c.JSON(400, gin.H{"message": "StreamingBatch marshal failed", "error": err.Error()})
 		return
 	}
-	writer.SendMessage(service.ServiceName, "", bData)
+	writer.SendMessage(serviceName, "", bData)
 	c.JSON(200, gin.H{"message": "success"})
 }
