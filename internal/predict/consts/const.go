@@ -1,5 +1,7 @@
 package consts
 
+import "time"
+
 const QPSMetricsName = "qps"
 const LatencySectionFactorMetricsName = "qps_section_factor"
 const DefaultPredictQueryCount = 60
@@ -9,6 +11,7 @@ const DefaultRuleConcurrency = 10
 
 const DefaultTrimmedSecond = 1
 const TrimmedSecond = 5
+const StepDuration = time.Second * 1
 
 const (
 	SchedulxExpandSuccess = "调用schedulx扩容接口成功："

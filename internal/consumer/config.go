@@ -3,8 +3,8 @@ package consumer
 import (
 	"encoding/json"
 
-	"github.com/galaxy-future/cudgx/common/clickhouse"
 	"github.com/galaxy-future/cudgx/common/kafka"
+	"github.com/galaxy-future/cudgx/common/victoriametrics"
 )
 
 func LoadConfig(data []byte) (*Config, error) {
@@ -17,10 +17,8 @@ func LoadConfig(data []byte) (*Config, error) {
 type Config struct {
 	//Kafka 配置
 	Kafka *KafkaConfig `json:"kafka"`
-	//Clickhouse 连接配置
-	Clickhouse *clickhouse.Config `json:"clickhouse"`
-	//WriteConfig 写入配置
-	WriteConfig *clickhouse.WriterConfig `json:"write_config"`
+	//VictoriaMetrics 连接配置
+	VictoriaMetrics *victoriametrics.Config `json:"victoria_metrics"`
 }
 
 //KafkaConfig 消费程序用到kafka的配置

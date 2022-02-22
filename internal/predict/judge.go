@@ -9,7 +9,6 @@ import (
 	"github.com/galaxy-future/cudgx/internal/predict/config"
 	"github.com/galaxy-future/cudgx/internal/predict/consts"
 	redundancy_keeper "github.com/galaxy-future/cudgx/internal/predict/redundancy-keeper"
-	"github.com/galaxy-future/cudgx/internal/predict/xclient"
 )
 
 var predictor *Predictor
@@ -40,19 +39,15 @@ func InitializeByConfig(theConfig *config.Config) error {
 		theConfig.Predict.MetricSendDuration = types.Duration{Duration: 5 * time.Second}
 	}
 
-	err := clients.InitClickhouseRdCli(theConfig.Clickhouse)
-	if err != nil {
-		return err
-	}
 	predictor = &Predictor{
 		config: theConfig.Predict,
 	}
-	err = clients.InitDBClient(theConfig.Database)
+	err := clients.InitDBClient(theConfig.Database)
 	if err != nil {
 		return err
 	}
-	xclient.InitializeBridgxClient(theConfig.Xclient.BridgxServerAddress)
-	xclient.InitializeSchedulxClient(theConfig.Xclient.SchedulxServerAddress)
+	clients.InitializeBridgxClient(theConfig.Xclient.BridgxServerAddress)
+	clients.InitializeSchedulxClient(theConfig.Xclient.SchedulxServerAddress)
 	redundancy_keeper.InitRedundancyKeeper(theConfig.Predict)
 	return nil
 }

@@ -9,7 +9,7 @@ data:
   {
   "kafka": {
     "brokers": ["172.16.16.180:9092"],
-    "group": "consumer_v1",
+    "group": "consumer_v2",
     "topic": "monitoring_metrics_gf",
     "consumer":  {
       "KafkaVersion": "2.0.0",
@@ -52,21 +52,15 @@ data:
       }
     }
   },
-  "clickhouse": {
-    "schema": "http",
-    "user": "writer",
-    "password": "1fafbdc341a747dd92e86dec13a37735",
-    "hosts": ["172.16.16.180:8123","172.16.16.181:8123","172.16.16.182:8123"],
-    "write_timeout": "60s",
-    "database": "metrics",
-    "table": "metrics_gf_test_local"
-  },
-  "write_config": {
-    "flush_duration": "1s",
-    "backoff": "100ms",
-    "retry_count": 3,
-    "batch_size": 100000,
-    "concurrency": 3
+  "victoria_metrics": {
+    "writer": {
+      "vm_url": "http://172.16.16.223:8480/insert/0/prometheus/api/v1/write",
+      "flush_duration": "5s",
+      "backoff": "100ms",
+      "retry_count": 3,
+      "batch_size": 100000,
+      "concurrency": 3
+    }
   }
 }
   '
@@ -83,15 +77,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cudgx-consumer
+      app: gf-consumer
   template:
     metadata:
       labels:
-        app: cudgx-consumer
+        app: gf-consumer
     spec:
       containers:
         - name: consumer
-          image: 172.16.16.172:12380/cudgx/consumer:v0.3
+          image: 172.16.16.172:12380/cudgx/consumer:v0.7
           imagePullPolicy: Always
           volumeMounts:
             - name: configure

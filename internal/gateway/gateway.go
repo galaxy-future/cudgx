@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -8,6 +9,8 @@ import (
 	"github.com/galaxy-future/cudgx/common/mod"
 	wrapmod "github.com/galaxy-future/cudgx/internal/gateway/mod"
 )
+
+var ErrWrongParams = errors.New("wrong params")
 
 type KafkaClient struct {
 	producer *kafka.ProducerClient
