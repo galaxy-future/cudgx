@@ -71,7 +71,7 @@ func QueryRedundancyByServiceNameAndClusterName(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.MkFailedResponse("benchmark不能为0"))
 		return
 	}
-	redundancySeries, err := service.QueryRedundancy(serviceName, clusterName, rule.MetricName, float64(benchmark), time.Now().Add(-5*time.Second).Unix(), time.Now().Unix(), consts.DefaultTrimmedSecond)
+	redundancySeries, err := service.QueryRedundancy(serviceName, clusterName, rule.MetricName, float64(benchmark), time.Now().Add(-30*time.Second).Unix(), time.Now().Unix(), consts.DefaultTrimmedSecond)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.MkFailedResponse(err.Error()))
 		return
