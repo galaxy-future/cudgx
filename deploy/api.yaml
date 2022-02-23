@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cudgx-api-config
+  name: cudgx-api-prod-config
 data:
   api.json: '
 {
@@ -15,8 +15,8 @@ data:
     "dsn": "root:db@galaxy-future.com@tcp(172.16.16.169:3306)/cudgx?charset=utf8mb4&parseTime=True&loc=Local"
   },
   "xclient": {
-    "bridgx_server_address": "http://bridgx-api.internal.galaxy-future.org",
-    "schedulx_server_address": "http://10.16.23.96:9090"
+    "bridgx_server_address": "http://iapi.galaxy-future.com/bridgx",
+    "schedulx_server_address": "http://iapi.galaxy-future.com/schedulx"
   },
   "victoria_metrics": {
       "reader": {
@@ -30,18 +30,18 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cudgx-api
+  name: cudgx-api-prod
   labels:
-    app: cudgx-api
+    app: cudgx-api-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cudgx-api
+      app: cudgx-api-prod
   template:
     metadata:
       labels:
-        app: cudgx-api
+        app: cudgx-api-prod
     spec:
       containers:
         - name: api
@@ -59,17 +59,17 @@ spec:
       volumes:
         - name: configure
           configMap:
-            name: cudgx-api-config
+            name: cudgx-api-prod-config
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: cudgx-api
+  name: cudgx-api-prod
 spec:
   selector:
-    app: cudgx-api
+    app: cudgx-api-prod
   type: NodePort
   ports:
     - protocol: TCP

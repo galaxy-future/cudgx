@@ -128,7 +128,7 @@ func scheduleRule(rule *model.PredictRule) error {
 
 		//取冗余度的中间数
 		midRedundancy := float64((rule.MaxRedundancy+rule.MinRedundancy)/2) / 100.0
-
+		currentCount = currentCount + 1
 		expectCount := int(midRedundancy / redundancy * float64(currentCount))
 
 		diff := expectCount - currentCount
