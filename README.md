@@ -165,3 +165,8 @@ Authorization
 
 CudgX uses [Elastic License 2.0](https://github.com/galaxy-future/cudgx/blob/master/LICENSE) Agreement for Authorization.
 
+Contact us
+-----
+If you want more information about the service, scan the following QR code to contact us:
+![image](https://user-images.githubusercontent.com/102009012/163563581-45874bce-2f79-46ee-b309-2757ddd17c46.png)
+
